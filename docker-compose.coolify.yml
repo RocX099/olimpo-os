@@ -1,0 +1,32 @@
+services:
+  olimpo-os:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "9119:9119"
+    volumes:
+      - olimpo-data:/opt/data
+    environment:
+      HERMES_HOME: /opt/data
+      HERMES_WRITE_SAFE_ROOT: /opt/data
+      HERMES_WEB_DIST: /opt/hermes/hermes_cli/web_dist
+      HERMES_DASHBOARD_PUBLIC_URL: ${HERMES_DASHBOARD_PUBLIC_URL:-}
+      HERMES_DASHBOARD_BASIC_AUTH_USERNAME: ${HERMES_DASHBOARD_BASIC_AUTH_USERNAME}
+      HERMES_DASHBOARD_BASIC_AUTH_PASSWORD_HASH: ${HERMES_DASHBOARD_BASIC_AUTH_PASSWORD_HASH}
+      HERMES_DASHBOARD_BASIC_AUTH_SECRET: ${HERMES_DASHBOARD_BASIC_AUTH_SECRET}
+      HERMES_DASHBOARD_BASIC_AUTH_TTL_SECONDS: ${HERMES_DASHBOARD_BASIC_AUTH_TTL_SECONDS:-43200}
+      VITE_SENTRY_DSN: ${VITE_SENTRY_DSN:-}
+      VITE_SENTRY_RELEASE: ${VITE_SENTRY_RELEASE:-olimpo-vps}
+    command:
+      - dashboard
+      - --host
+      - 0.0.0.0
+      - --port
+      - "9119"
+      - --no-open
+      - --skip-build
+
+volumes:
+  olimpo-data:
