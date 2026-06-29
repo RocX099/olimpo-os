@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Olimpo OS Intake</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7faf8;
+      --paper: #ffffff;
+      --ink: #17202a;
+      --muted: #607086;
+      --line: #dce6df;
+      --soft: #eef7f2;
+      --mint: #30b77a;
+      --mint-dark: #15734c;
+      --sky: #3b82f6;
+      --sun: #f7b955;
+      --rose: #f26d7d;
+      --shadow: 0 22px 70px rgba(35, 65, 55, .12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 4%, rgba(48, 183, 122, .20), transparent 22rem),
+        radial-gradient(circle at 90% 0%, rgba(247, 185, 85, .22), transparent 20rem),
+        linear-gradient(180deg, #fbfdf9 0%, var(--bg) 42%, #f1f7fb 100%);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    button, input, textarea, select { font: inherit; }
+
+    .shell {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 56px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 44px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--mint);
+      color: white;
+      box-shadow: 0 10px 24px rgba(48, 183, 122, .28);
+    }
+
+    .language {
+      display: flex;
+      gap: 8px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .72);
+      backdrop-filter: blur(12px);
+    }
+
+    .language button,
+    .mode button {
+      border: 0;
+      border-radius: 999px;
+      min-height: 34px;
+      padding: 0 14px;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .language button.active,
+    .mode button.active {
+      background: var(--ink);
+      color: white;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 14px;
+      color: var(--mint-dark);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--sun);
+    }
+
+    h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(44px, 7vw, 86px);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 720px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 19px;
+    }
+
+    .summary {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .76);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .summary strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .summary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .step {
+      min-height: 92px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .82);
+      padding: 16px;
+    }
+
+    .step span {
+      display: block;
+      color: var(--mint-dark);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .step strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 17px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .side {
+      position: sticky;
+      top: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .mode,
+    .nav {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .82);
+      box-shadow: var(--shadow);
+      padding: 12px;
+    }
+
+    .mode-label {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .mode-control {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: var(--soft);
+    }
+
+    .nav {
+      display: grid;
+      gap: 3px;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 10px 11px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav a:hover { background: var(--soft); color: var(--ink); }
+
+    .content {
+      display: grid;
+      gap: 18px;
+    }
+
+    section,
+    .submit-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .9);
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+
+    h2 {
+      margin: 0 0 6px;
+      font-size: 25px;
+      letter-spacing: 0;
+    }
+
+    .hint {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+      align-content: start;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      color: #263241;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 12px 13px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--sky);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, .14);
+    }
+
+    .choices,
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .choice,
+    .tool {
+      position: relative;
+      display: grid;
+      gap: 6px;
+      min-height: 84px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdfc;
+      cursor: pointer;
+    }
+
+    .tool { min-height: 56px; align-content: center; }
+
+    .choice input,
+    .tool input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .choice strong,
+    .tool strong { font-size: 14px; }
+
+    .choice span { color: var(--muted); font-size: 12px; }
+
+    .choice:has(input:checked),
+    .tool:has(input:checked) {
+      border-color: var(--mint);
+      background: #eaf8f1;
+      box-shadow: inset 0 0 0 1px rgba(48, 183, 122, .25);
+    }
+
+    .advanced-only { display: none; }
+    body[data-mode="advanced"] .advanced-only { display: block; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .cta,
+    .secondary {
+      border: 0;
+      border-radius: 8px;
+      min-height: 48px;
+      padding: 0 18px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .cta {
+      background: linear-gradient(135deg, var(--mint), var(--sky));
+      color: white;
+      box-shadow: 0 16px 36px rgba(48, 183, 122, .24);
+    }
+
+    .secondary {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+    }
+
+    .message {
+      margin: 14px 0 0;
+      color: var(--mint-dark);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .error {
+      color: #b4233a;
+    }
+
+    .footer {
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 920px) {
+      .hero, .layout { grid-template-columns: 1fr; }
+      .side { position: static; }
+      .steps { grid-template-columns: 1fr; }
+      .grid, .choices, .tools { grid-template-columns: 1fr; }
+      .topbar { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body data-mode="normal">
+  <main class="shell">
+    <div class="topbar">
+      <div class="brand"><span class="mark">O</span><span>Olimpo OS</span></div>
+      <div class="language" aria-label="Language">
+        <button type="button" id="langEs" class="active">ES</button>
+        <button type="button" id="langEn">EN</button>
+      </div>
+    </div>
+
+    <header class="hero">
+      <div>
+        <p class="eyebrow"><span class="dot"></span><span data-i18n="eyebrow">Formulario de creación</span></p>
+        <h1 data-i18n="heroTitle">Diseña tu segunda operativa.</h1>
+        <p class="lead" data-i18n="heroLead">Cuéntanos qué necesitas y prepararemos una propuesta de sistema operativo personal, profesional o de proyecto. No copiaremos Olimpo OS tal cual: elegiremos solo las capas que tengan sentido para ti.</p>
+      </div>
+      <aside class="summary">
+        <strong data-i18n="summaryTitle">Qué ocurre después</strong>
+        <p data-i18n="summaryText">Al enviar el formulario se prepara un correo para Olimpo. Revisaremos tus respuestas y convertiremos el caso en un SOUL.md y un blueprint operativo.</p>
+      </aside>
+    </header>
+
+    <div class="steps" aria-label="Flow">
+      <div class="step"><span data-i18n="step1Kicker">Paso 1</span><strong data-i18n="step1">Describe tu caso</strong></div>
+      <div class="step"><span data-i18n="step2Kicker">Paso 2</span><strong data-i18n="step2">Elige lo necesario</strong></div>
+      <div class="step"><span data-i18n="step3Kicker">Paso 3</span><strong data-i18n="step3">Envía la solicitud</strong></div>
+    </div>
+
+    <div class="layout">
+      <aside class="side">
+        <div class="mode">
+          <p class="mode-label" data-i18n="modeLabel">Modo</p>
+          <div class="mode-control">
+            <button type="button" class="active" id="normalBtn" data-i18n="normalMode">Normal</button>
+            <button type="button" id="advancedBtn" data-i18n="advancedMode">Avanzado</button>
+          </div>
+        </div>
+        <nav class="nav" aria-label="Sections">
+          <a href="#perfil" data-i18n="navProfile">Perfil</a>
+          <a href="#mision" data-i18n="navMission">Misión</a>
+          <a href="#herramientas" data-i18n="navTools">Herramientas</a>
+          <a href="#personalidad" data-i18n="navPersonality">Personalidad</a>
+          <a href="#seguridad" data-i18n="navSafety">Seguridad</a>
+          <a href="#avanzado" class="advanced-only" data-i18n="navAdvanced">Avanzado</a>
+          <a href="#enviar" data-i18n="navSend">Enviar</a>
+        </nav>
+      </aside>
+
+      <form class="content" id="intakeForm" novalidate>
+        <section id="perfil">
+          <h2 data-i18n="profileTitle">1. Perfil</h2>
+          <p class="hint" data-i18n="profileHint">Para adaptar el lenguaje, la profundidad y el tipo de propuesta.</p>
+          <div class="grid">
+            <div class="field">
+              <label for="fullName" data-i18n="nameLabel">Nombre o proyecto</label>
+              <input id="fullName" name="fullName" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="email" data-i18n="emailLabel">Email de contacto</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div class="field full">
+              <label data-i18n="userTypeLabel">Tipo de usuario</label>
+              <div class="choices">
+                <label class="choice"><input type="radio" name="userType" value="Guided user"><strong data-i18n="userSimple">Usuario guiado</strong><span data-i18n="userSimpleDesc">Quiero algo claro, fácil y sin tecnicismos.</span></label>
+                <label class="choice"><input type="radio" name="userType" value="Founder/professional" checked><strong data-i18n="userFounder">Founder/profesional</strong><span data-i18n="userFounderDesc">Quiero productividad, criterio y ejecución.</span></label>
+                <label class="choice"><input type="radio" name="userType" value="Technical user"><strong data-i18n="userTech">Usuario técnico</strong><span data-i18n="userTechDesc">Quiero detalle de herramientas e integraciones.</span></label>
+              </div>
+            </div>
+            <div class="field">
+              <label for="domain" data-i18n="domainLabel">Ámbito principal</label>
+              <select id="domain" name="domain">
+                <option data-i18n-option="domainPersonal">Personal</option>
+                <option data-i18n-option="domainBusiness">Negocio / empresa</option>
+                <option data-i18n-option="domainDigital">Proyecto digital</option>
+                <option data-i18n-option="domainStudy">Estudios / investigación</option>
+                <option data-i18n-option="domainTeam">Equipo interno</option>
+                <option data-i18n-option="domainOther">Otro</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="technicalLevel" data-i18n="techLabel">Nivel técnico</label>
+              <select id="technicalLevel" name="technicalLevel">
+                <option data-i18n-option="techLow">Bajo: necesito que sea muy fácil</option>
+                <option selected data-i18n-option="techMid">Medio: uso herramientas digitales</option>
+                <option data-i18n-option="techHigh">Alto: puedo configurar servicios</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section id="mision">
+          <h2 data-i18n="missionTitle">2. Misión</h2>
+          <p class="hint" data-i18n="missionHint">Aquí definimos para qué existe tu OS. Si esto no está claro, todo lo demás sobra.</p>
+          <div class="grid">
+            <div class="field full">
+              <label for="purpose" data-i18n="purposeLabel">¿Para qué quieres este OS o segunda operativa?</label>
+              <textarea id="purpose" name="purpose" required></textarea>
+            </div>
+            <div class="field">
+              <label for="pain" data-i18n="painLabel">¿Qué te está costando ahora?</label>
+              <textarea id="pain" name="pain"></textarea>
+            </div>
+            <div class="field">
+              <label for="success" data-i18n="successLabel">¿Qué sería un primer resultado útil?</label>
+              <textarea id="success" name="success"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section id="herramientas">
+          <h2 data-i18n="toolsTitle">3. Herramientas y módulos</h2>
+          <p class="hint" data-i18n="toolsHint">No todo el mundo necesita todo. Marca lo que podría aportar valor y escribe lo que no quieres.</p>
+          <div class="field full">
+            <label data-i18n="modulesLabel">Módulos que podrían tener sentido</label>
+            <div class="tools">
+              <label class="tool"><input type="checkbox" name="tools" value="Dashboard/cockpit"><strong>Dashboard</strong></label>
+              <label class="tool"><input type="checkbox" name="tools" value="Memory/RAG"><strong data-i18n="toolMemory">Memoria/RAG</strong></label>
+              <label class="tool"><input type="checkbox" name="tools" value="Tasks and delegation"><strong data-i18n="toolTasks">Tareas</strong></label>
+              <label class="tool"><input type="checkbox" name="tools" value="Voice/transcription"><strong data-i18n="toolVoice">Voz</strong></label>
+              <label class="tool"><input type="checkbox" name="tools" value="Controlled agents"><strong data-i18n="toolAgents">Agentes</strong></label>
+              <label class="tool"><input type="checkbox" name="tools" value="Automations"><strong data-i18n="toolAutomations">Automatizaciones</strong></label>
+              <label class="tool"><input type="checkbox" name="tools" value="Email"><strong>Email</strong></label>
+              <label class="tool"><input type="checkbox" name="tools" value="Calendar"><strong data-i18n="toolCalendar">Calendario</strong></label>
+              <label class="tool"><input type="checkbox" name="tools" value="Drive/documents"><strong>Drive/docs</strong></label>
+              <label class="tool"><input type="checkbox" name="tools" value="Messaging"><strong data-i18n="toolMessaging">Mensajería</strong></label>
+              <label class="tool"><input type="checkbox" name="tools" value="Code/GitHub"><strong>GitHub</strong></label>
+              <label class="tool"><input type="checkbox" name="tools" value="Research radar"><strong data-i18n="toolRadar">Radar</strong></label>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="field">
+              <label for="currentTools" data-i18n="currentToolsLabel">¿Qué herramientas usas hoy?</label>
+              <textarea id="currentTools" name="currentTools"></textarea>
+            </div>
+            <div class="field">
+              <label for="blockedTools" data-i18n="blockedToolsLabel">¿Qué NO quieres que tenga?</label>
+              <textarea id="blockedTools" name="blockedTools"></textarea>
+            </div>
+            <div class="field full">
+              <label for="unknownNeeds" data-i18n="unknownNeedsLabel">¿Qué quieres que estudiemos aunque no sepas si lo necesitas?</label>
+              <textarea id="unknownNeeds" name="unknownNeeds"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section id="personalidad">
+          <h2 data-i18n="personalityTitle">4. Personalidad</h2>
+          <p class="hint" data-i18n="personalityHint">El OS debe tener una presencia propia: tono, criterio y forma de acompañarte.</p>
+          <div class="grid">
+            <div class="field">
+              <label for="tone" data-i18n="toneLabel">¿Cómo quieres que se sienta?</label>
+              <select id="tone" name="tone">
+                <option data-i18n-option="toneClose">Profesional cercano</option>
+                <option data-i18n-option="tonePremium">Premium serio</option>
+                <option data-i18n-option="toneCalm">Calmado y minimalista</option>
+                <option data-i18n-option="toneDirect">Directo y exigente</option>
+                <option data-i18n-option="toneCreative">Creativo y expresivo</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="directness" data-i18n="directnessLabel">Nivel de franqueza</label>
+              <select id="directness" name="directness">
+                <option data-i18n-option="directSoft">Suave: que pregunte y acompañe</option>
+                <option selected data-i18n-option="directBalanced">Equilibrado: claro sin ser duro</option>
+                <option data-i18n-option="directHigh">Alto: que me diga lo que no funciona</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="references" data-i18n="referencesLabel">Referencias o estilo deseado</label>
+              <textarea id="references" name="references"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section id="seguridad">
+          <h2 data-i18n="safetyTitle">5. Seguridad y límites</h2>
+          <p class="hint" data-i18n="safetyHint">Esto evita crear un sistema útil pero peligroso.</p>
+          <div class="grid">
+            <div class="field">
+              <label for="sensitiveData" data-i18n="sensitiveLabel">¿Qué datos son sensibles?</label>
+              <textarea id="sensitiveData" name="sensitiveData"></textarea>
+            </div>
+            <div class="field">
+              <label for="approvalRules" data-i18n="approvalLabel">¿Qué requiere aprobación humana?</label>
+              <textarea id="approvalRules" name="approvalRules"></textarea>
+            </div>
+            <div class="field full">
+              <label for="neverDo" data-i18n="neverLabel">¿Qué debe estar bloqueado siempre?</label>
+              <textarea id="neverDo" name="neverDo"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section id="avanzado" class="advanced-only">
+          <h2 data-i18n="advancedTitle">6. Avanzado</h2>
+          <p class="hint" data-i18n="advancedHint">Solo para afinar arquitectura, despliegue, modelos e integraciones.</p>
+          <div class="grid">
+            <div class="field">
+              <label for="integrations" data-i18n="integrationsLabel">Integraciones concretas</label>
+              <textarea id="integrations" name="integrations"></textarea>
+            </div>
+            <div class="field">
+              <label for="deployment" data-i18n="deploymentLabel">¿Dónde debería vivir?</label>
+              <textarea id="deployment" name="deployment"></textarea>
+            </div>
+            <div class="field">
+              <label for="models" data-i18n="modelsLabel">Modelos IA o preferencias</label>
+              <textarea id="models" name="models"></textarea>
+            </div>
+            <div class="field">
+              <label for="audit" data-i18n="auditLabel">Auditoría y logs</label>
+              <textarea id="audit" name="audit"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <div class="submit-panel" id="enviar">
+          <h2 data-i18n="sendTitle">Enviar solicitud</h2>
+          <p class="hint" data-i18n="sendHint">Gracias por contestar. Al enviar se abrirá un correo preparado con tus respuestas para que podamos revisar tu caso.</p>
+          <div class="actions">
+            <button type="submit" class="cta" id="sendBtn" data-i18n="sendButton">Enviar formulario</button>
+            <button type="button" class="secondary" id="downloadBtn" data-i18n="downloadButton">Descargar copia</button>
+          </div>
+          <p class="message" id="formMessage" aria-live="polite"></p>
+          <textarea id="backendPayload" name="backendPayload" hidden></textarea>
+        </div>
+      </form>
+    </div>
+
+    <p class="footer" data-i18n="footer">No incluyas contraseñas, claves privadas ni datos que no quieras compartir en esta primera solicitud.</p>
+  </main>
+
+  <script>
+    const emailTarget = "orrocawork@gmail.com";
+    const form = document.getElementById("intakeForm");
+    const payloadField = document.getElementById("backendPayload");
+    const message = document.getElementById("formMessage");
+    const normalBtn = document.getElementById("normalBtn");
+    const advancedBtn = document.getElementById("advancedBtn");
+    const langEs = document.getElementById("langEs");
+    const langEn = document.getElementById("langEn");
+    let currentLanguage = "es";
+
+    const copy = {
+      es: {
+        eyebrow: "Formulario de creación",
+        heroTitle: "Diseña tu segunda operativa.",
+        heroLead: "Cuéntanos qué necesitas y prepararemos una propuesta de sistema operativo personal, profesional o de proyecto. No copiaremos Olimpo OS tal cual: elegiremos solo las capas que tengan sentido para ti.",
+        summaryTitle: "Qué ocurre después",
+        summaryText: "Al enviar el formulario se prepara un correo para Olimpo. Revisaremos tus respuestas y prepararemos una propuesta adaptada a tu caso.",
+        step1Kicker: "Paso 1", step1: "Describe tu caso",
+        step2Kicker: "Paso 2", step2: "Elige lo necesario",
+        step3Kicker: "Paso 3", step3: "Envía la solicitud",
+        modeLabel: "Modo", normalMode: "Normal", advancedMode: "Avanzado",
+        navProfile: "Perfil", navMission: "Misión", navTools: "Herramientas", navPersonality: "Personalidad", navSafety: "Seguridad", navAdvanced: "Avanzado", navSend: "Enviar",
+        profileTitle: "1. Perfil", profileHint: "Para adaptar el lenguaje, la profundidad y el tipo de propuesta.",
+        nameLabel: "Nombre o proyecto", emailLabel: "Email de contacto", userTypeLabel: "Tipo de usuario",
+        userSimple: "Usuario guiado", userSimpleDesc: "Quiero algo claro, fácil y sin tecnicismos.",
+        userFounder: "Founder/profesional", userFounderDesc: "Quiero productividad, criterio y ejecución.",
+        userTech: "Usuario técnico", userTechDesc: "Quiero detalle de herramientas e integraciones.",
+        domainLabel: "Ámbito principal", techLabel: "Nivel técnico",
+        missionTitle: "2. Misión", missionHint: "Aquí definimos para qué existe tu OS. Si esto no está claro, todo lo demás sobra.",
+        purposeLabel: "¿Para qué quieres este OS o segunda operativa?", painLabel: "¿Qué te está costando ahora?", successLabel: "¿Qué sería un primer resultado útil?",
+        toolsTitle: "3. Herramientas y módulos", toolsHint: "No todo el mundo necesita todo. Marca lo que podría aportar valor y escribe lo que no quieres.",
+        modulesLabel: "Módulos que podrían tener sentido", toolMemory: "Memoria/RAG", toolTasks: "Tareas", toolVoice: "Voz", toolAgents: "Agentes", toolAutomations: "Automatizaciones", toolCalendar: "Calendario", toolMessaging: "Mensajería", toolRadar: "Radar",
+        currentToolsLabel: "¿Qué herramientas usas hoy?", blockedToolsLabel: "¿Qué NO quieres que tenga?", unknownNeedsLabel: "¿Qué quieres que estudiemos aunque no sepas si lo necesitas?",
+        personalityTitle: "4. Personalidad", personalityHint: "El OS debe tener una presencia propia: tono, criterio y forma de acompañarte.",
+        toneLabel: "¿Cómo quieres que se sienta?", directnessLabel: "Nivel de franqueza", referencesLabel: "Referencias o estilo deseado",
+        safetyTitle: "5. Seguridad y límites", safetyHint: "Esto evita crear un sistema útil pero peligroso.",
+        sensitiveLabel: "¿Qué datos son sensibles?", approvalLabel: "¿Qué requiere aprobación humana?", neverLabel: "¿Qué debe estar bloqueado siempre?",
+        advancedTitle: "6. Avanzado", advancedHint: "Solo para afinar arquitectura, despliegue, modelos e integraciones.",
+        integrationsLabel: "Integraciones concretas", deploymentLabel: "¿Dónde debería vivir?", modelsLabel: "Modelos IA o preferencias", auditLabel: "Auditoría y logs",
+        sendTitle: "Enviar solicitud", sendHint: "Gracias por contestar. Al enviar se abrirá un correo preparado con tus respuestas para que podamos revisar tu caso.",
+        sendButton: "Enviar formulario", downloadButton: "Descargar copia",
+        footer: "No incluyas contraseñas, claves privadas ni datos que no quieras compartir en esta primera solicitud.",
+        required: "Revisa nombre, email y misión antes de enviar.",
+        prepared: "Correo preparado. Si tu navegador lo bloquea, descarga la copia y envíala manualmente.",
+        downloaded: "Copia descargada.",
+        placeholders: {
+          fullName: "Tu nombre o nombre del proyecto",
+          email: "tu@email.com",
+          purpose: "Ejemplo: organizar mi empresa, gestionar clientes, estudiar mejor, crear contenido o coordinar un equipo.",
+          pain: "Desorden, tareas dispersas, demasiadas herramientas, falta de seguimiento, poca memoria...",
+          success: "Un panel, un sistema de tareas, memoria de clientes, automatizar informes...",
+          currentTools: "Google Workspace, Notion, Excel, WhatsApp, Slack, GitHub, ninguna...",
+          blockedTools: "Ejemplo: no quiero voz, no quiero WhatsApp, no quiero IA tocando archivos.",
+          unknownNeeds: "Ejemplo: no sé si necesito RAG, agentes, modelos locales o un dashboard. Quiero recomendación.",
+          references: "Ejemplo: cockpit serio, consultor privado, Notion limpio, consola de mando...",
+          sensitiveData: "Clientes, finanzas, legal, salud, documentos internos, contraseñas...",
+          approvalRules: "Enviar emails, borrar archivos, publicar, pagar, tocar datos sensibles...",
+          neverDo: "Ejemplo: no enviar mensajes solo, no tocar cuentas bancarias, no ejecutar comandos sin permiso.",
+          integrations: "Gmail, Calendar, Drive, Notion, Slack, WhatsApp, GitHub, CRM, ERP...",
+          deployment: "Local en mi PC, VPS, nube privada, solo documentos, no lo sé...",
+          models: "OpenAI, Claude, Ollama/local, modelos pequeños, privacidad máxima...",
+          audit: "Qué se debe registrar, quién aprueba, cuánto tiempo se guarda..."
+        },
+        options: {
+          domainPersonal: "Personal", domainBusiness: "Negocio / empresa", domainDigital: "Proyecto digital", domainStudy: "Estudios / investigación", domainTeam: "Equipo interno", domainOther: "Otro",
+          techLow: "Bajo: necesito que sea muy fácil", techMid: "Medio: uso herramientas digitales", techHigh: "Alto: puedo configurar servicios",
+          toneClose: "Profesional cercano", tonePremium: "Premium serio", toneCalm: "Calmado y minimalista", toneDirect: "Directo y exigente", toneCreative: "Creativo y expresivo",
+          directSoft: "Suave: que pregunte y acompañe", directBalanced: "Equilibrado: claro sin ser duro", directHigh: "Alto: que me diga lo que no funciona"
+        }
+      },
+      en: {
+        eyebrow: "Creation intake",
+        heroTitle: "Design your second operating layer.",
+        heroLead: "Tell us what you need and we will prepare a proposal for a personal, professional, or project operating system. We will not copy Olimpo OS as-is: we will choose only the layers that make sense for you.",
+        summaryTitle: "What happens next",
+        summaryText: "When you submit the form, an email is prepared for Olimpo. We review your answers and prepare a proposal adapted to your case.",
+        step1Kicker: "Step 1", step1: "Describe your case",
+        step2Kicker: "Step 2", step2: "Choose what matters",
+        step3Kicker: "Step 3", step3: "Send the request",
+        modeLabel: "Mode", normalMode: "Normal", advancedMode: "Advanced",
+        navProfile: "Profile", navMission: "Mission", navTools: "Tools", navPersonality: "Personality", navSafety: "Safety", navAdvanced: "Advanced", navSend: "Send",
+        profileTitle: "1. Profile", profileHint: "This helps us adapt the language, depth, and type of proposal.",
+        nameLabel: "Name or project", emailLabel: "Contact email", userTypeLabel: "User type",
+        userSimple: "Guided user", userSimpleDesc: "I want something clear, easy, and non-technical.",
+        userFounder: "Founder/professional", userFounderDesc: "I want productivity, judgment, and execution.",
+        userTech: "Technical user", userTechDesc: "I want detail on tools and integrations.",
+        domainLabel: "Main area", techLabel: "Technical level",
+        missionTitle: "2. Mission", missionHint: "Here we define why your OS exists. If this is unclear, everything else is noise.",
+        purposeLabel: "What do you want this OS or second operating layer for?", painLabel: "What is difficult right now?", successLabel: "What would be a useful first result?",
+        toolsTitle: "3. Tools and modules", toolsHint: "Not everyone needs everything. Select what could add value and tell us what you do not want.",
+        modulesLabel: "Modules that could make sense", toolMemory: "Memory/RAG", toolTasks: "Tasks", toolVoice: "Voice", toolAgents: "Agents", toolAutomations: "Automations", toolCalendar: "Calendar", toolMessaging: "Messaging", toolRadar: "Radar",
+        currentToolsLabel: "What tools do you use today?", blockedToolsLabel: "What should it NOT include?", unknownNeedsLabel: "What should we study even if you are not sure you need it?",
+        personalityTitle: "4. Personality", personalityHint: "The OS should have its own presence: tone, judgment, and way of supporting you.",
+        toneLabel: "How should it feel?", directnessLabel: "Directness level", referencesLabel: "References or desired style",
+        safetyTitle: "5. Safety and limits", safetyHint: "This prevents us from creating a useful but dangerous system.",
+        sensitiveLabel: "What data is sensitive?", approvalLabel: "What requires human approval?", neverLabel: "What must always be blocked?",
+        advancedTitle: "6. Advanced", advancedHint: "For architecture, deployment, models, and integrations.",
+        integrationsLabel: "Specific integrations", deploymentLabel: "Where should it live?", modelsLabel: "AI models or preferences", auditLabel: "Audit and logs",
+        sendTitle: "Send request", sendHint: "Thank you for answering. Submitting opens a prepared email with your responses so we can review your case.",
+        sendButton: "Send form", downloadButton: "Download copy",
+        footer: "Do not include passwords, private keys, or data you do not want to share in this first request.",
+        required: "Please check name, email, and mission before sending.",
+        prepared: "Email prepared. If your browser blocks it, download the copy and send it manually.",
+        downloaded: "Copy downloaded.",
+        placeholders: {
+          fullName: "Your name or project name",
+          email: "you@email.com",
+          purpose: "Example: organize my company, manage clients, study better, create content, or coordinate a team.",
+          pain: "Disorder, scattered tasks, too many tools, lack of follow-up, poor memory...",
+          success: "A dashboard, a task system, client memory, automated reports...",
+          currentTools: "Google Workspace, Notion, Excel, WhatsApp, Slack, GitHub, none...",
+          blockedTools: "Example: I do not want voice, WhatsApp, or AI touching files.",
+          unknownNeeds: "Example: I am not sure whether I need RAG, agents, local models, or a dashboard. I want a recommendation.",
+          references: "Example: serious cockpit, private consultant, clean Notion, command center...",
+          sensitiveData: "Clients, finances, legal, health, internal documents, passwords...",
+          approvalRules: "Sending emails, deleting files, publishing, paying, touching sensitive data...",
+          neverDo: "Example: never send messages alone, never touch bank accounts, never run commands without permission.",
+          integrations: "Gmail, Calendar, Drive, Notion, Slack, WhatsApp, GitHub, CRM, ERP...",
+          deployment: "Local on my PC, VPS, private cloud, documents only, not sure...",
+          models: "OpenAI, Claude, Ollama/local, smaller models, maximum privacy...",
+          audit: "What should be logged, who approves, how long logs are stored..."
+        },
+        options: {
+          domainPersonal: "Personal", domainBusiness: "Business / company", domainDigital: "Digital project", domainStudy: "Studies / research", domainTeam: "Internal team", domainOther: "Other",
+          techLow: "Low: I need it to be very easy", techMid: "Medium: I use digital tools", techHigh: "High: I can configure services",
+          toneClose: "Warm professional", tonePremium: "Serious premium", toneCalm: "Calm and minimal", toneDirect: "Direct and demanding", toneCreative: "Creative and expressive",
+          directSoft: "Soft: ask and guide me", directBalanced: "Balanced: clear without being harsh", directHigh: "High: tell me what does not work"
+        }
+      }
+    };
+
+    function t(key) {
+      return copy[currentLanguage][key] || copy.es[key] || key;
+    }
+
+    function setLanguage(language) {
+      currentLanguage = language;
+      document.documentElement.lang = language;
+      langEs.classList.toggle("active", language === "es");
+      langEn.classList.toggle("active", language === "en");
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        node.textContent = t(node.dataset.i18n);
+      });
+      document.querySelectorAll("[data-i18n-option]").forEach((node) => {
+        node.textContent = copy[language].options[node.dataset.i18nOption];
+      });
+      Object.entries(copy[language].placeholders).forEach(([id, placeholder]) => {
+        const field = document.getElementById(id);
+        if (field) field.placeholder = placeholder;
+      });
+      updatePayload();
+    }
+
+    function setMode(mode) {
+      document.body.dataset.mode = mode;
+      normalBtn.classList.toggle("active", mode === "normal");
+      advancedBtn.classList.toggle("active", mode === "advanced");
+      updatePayload();
+    }
+
+    function value(name) {
+      const item = new FormData(form).get(name);
+      return item ? String(item).trim() : "";
+    }
+
+    function checkedValues(name) {
+      return Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map((input) => input.value);
+    }
+
+    function slug(text) {
+      return (text || "olimpo-os-intake")
+        .toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 56) || "olimpo-os-intake";
+    }
+
+    function collectData() {
+      return {
+        schema: "olimpo-os-intake-v2",
+        language: currentLanguage,
+        generatedAt: new Date().toISOString(),
+        mode: document.body.dataset.mode,
+        contact: {
+          name: value("fullName"),
+          email: value("email"),
+          userType: value("userType"),
+          domain: value("domain"),
+          technicalLevel: value("technicalLevel")
+        },
+        mission: {
+          purpose: value("purpose"),
+          pain: value("pain"),
+          success: value("success")
+        },
+        modules: {
+          requested: checkedValues("tools"),
+          currentTools: value("currentTools"),
+          blockedTools: value("blockedTools"),
+          unknownNeeds: value("unknownNeeds")
+        },
+        personality: {
+          tone: value("tone"),
+          directness: value("directness"),
+          references: value("references")
+        },
+        safety: {
+          sensitiveData: value("sensitiveData"),
+          approvalRules: value("approvalRules"),
+          neverDo: value("neverDo")
+        },
+        advanced: {
+          integrations: value("integrations"),
+          deployment: value("deployment"),
+          models: value("models"),
+          audit: value("audit")
+        }
+      };
+    }
+
+    function list(items) {
+      return items && items.length ? items.map((item) => `- ${item}`).join("\n") : "- Not provided";
+    }
+
+    function markdown(data) {
+      const name = data.contact.name || "New OS";
+      return `# Olimpo OS Intake - ${name}
+
+Generated at: ${data.generatedAt}
+Language: ${data.language}
+Mode: ${data.mode}
+
+## Contact
+
+- Name/project: ${data.contact.name || "Not provided"}
+- Email: ${data.contact.email || "Not provided"}
+- User type: ${data.contact.userType || "Not provided"}
+- Area: ${data.contact.domain || "Not provided"}
+- Technical level: ${data.contact.technicalLevel || "Not provided"}
+
+## Mission
+
+### Purpose
+${data.mission.purpose || "Not provided"}
+
+### Current pain
+${data.mission.pain || "Not provided"}
+
+### Useful first result
+${data.mission.success || "Not provided"}
+
+## Modules
+
+### Requested or possible
+${list(data.modules.requested)}
+
+### Current tools
+${data.modules.currentTools || "Not provided"}
+
+### Blocked or unwanted tools
+${data.modules.blockedTools || "Not provided"}
+
+### Needs to study
+${data.modules.unknownNeeds || "Not provided"}
+
+## Personality
+
+- Tone: ${data.personality.tone || "Not provided"}
+- Directness: ${data.personality.directness || "Not provided"}
+
+### References
+${data.personality.references || "Not provided"}
+
+## Safety
+
+### Sensitive data
+${data.safety.sensitiveData || "Not provided"}
+
+### Requires approval
+${data.safety.approvalRules || "Not provided"}
+
+### Always blocked
+${data.safety.neverDo || "Not provided"}
+
+## Advanced
+
+### Integrations
+${data.advanced.integrations || "Not provided"}
+
+### Deployment
+${data.advanced.deployment || "Not provided"}
+
+### Models
+${data.advanced.models || "Not provided"}
+
+### Audit
+${data.advanced.audit || "Not provided"}
+
+## Instruction for Codex
+
+Use the $olimpo-os-builder skill. Convert this intake into a SOUL.md, classify each module as required/optional/future/discarded, and prepare a replica blueprint without copying private Olimpo OS data.
+`;
+    }
+
+    function updatePayload() {
+      const data = collectData();
+      payloadField.value = JSON.stringify({ data, markdown: markdown(data) }, null, 2);
+      return data;
+    }
+
+    function download(filename, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function validateRequired() {
+      const ok = form.checkValidity();
+      if (!ok) {
+        message.textContent = t("required");
+        message.classList.add("error");
+        form.reportValidity();
+      }
+      return ok;
+    }
+
+    normalBtn.addEventListener("click", () => setMode("normal"));
+    advancedBtn.addEventListener("click", () => setMode("advanced"));
+    langEs.addEventListener("click", () => setLanguage("es"));
+    langEn.addEventListener("click", () => setLanguage("en"));
+    form.addEventListener("input", updatePayload);
+    form.addEventListener("change", updatePayload);
+
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+      const data = updatePayload();
+      const md = markdown(data);
+      download(`${slug(data.contact.name)}-olimpo-intake.md`, md, "text/markdown;charset=utf-8");
+      message.textContent = t("downloaded");
+      message.classList.remove("error");
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!validateRequired()) return;
+      const data = updatePayload();
+      const md = markdown(data);
+      const subject = encodeURIComponent(`Olimpo OS intake - ${data.contact.name || "unnamed"}`);
+      const body = encodeURIComponent(md.slice(0, 6500));
+      const mailto = `mailto:${emailTarget}?subject=${subject}&body=${body}`;
+      window.dispatchEvent(new CustomEvent("olimpo:submit-mailto", { detail: { href: mailto } }));
+      window.location.href = mailto;
+      message.textContent = t("prepared");
+      message.classList.remove("error");
+    });
+
+    setLanguage("es");
+    updatePayload();
+  </script>
+</body>
+</html>
